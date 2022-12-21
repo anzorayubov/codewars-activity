@@ -1,0 +1,36 @@
+<div class="years">
+  <div class="year" *ngFor="let year of years">
+    <span>{{year[0].year}}</span>
+    <div class="month">
+      <p>Jan</p>
+      <p>Feb</p>
+      <p>Mar</p>
+      <p>Apr</p>
+      <p>May</p>
+      <p>Jun</p>
+      <p>Jul</p>
+      <p>Aug</p>
+      <p>Sep</p>
+      <p>Oct</p>
+      <p>Nov</p>
+      <p>Dec</p>
+    </div>
+    <div class="days">
+      <div
+        [ngClass]="[
+        day.completedKata.length > 3 ? 'hasTwoKata' : '',
+        day.completedKata.length > 0 ? 'hasKata' : '']"
+
+        class="day"
+        *ngFor="let day of year[0].days">
+
+        <div class="hover-text" >
+          <span class="tooltip-text" id="top">
+            <span *ngFor="let kata of day.completedKata">{{kata.completedAt}}</span>
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
