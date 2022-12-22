@@ -12,5 +12,3 @@ export interface Kata {
 	slug?: string
 	days?: []
 }
-
-export type daysCount = 365 | 366

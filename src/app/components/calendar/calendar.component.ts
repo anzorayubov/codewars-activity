@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {debounceTime, fromEvent} from "rxjs";
-import {CodewarsResponse, daysCount, Kata} from "../../interfaces";
+import {CodewarsResponse, Kata} from "../../interfaces";
 
 @Component({
 	selector: 'app-calendar',
@@ -65,23 +65,19 @@ export class CalendarComponent implements OnInit {
 		});
 	}
 
-	getDaysInYear(year): string[] {
-		const date = new Date(year, 0, 1);
-		const end = new Date(date);
-		const array = []
-		end.setFullYear(end.getFullYear() + 1);
+	getDaysInYear(year: number) {
+		const days = [];
+		const start = new Date(year, 0, 1);
+		const end = new Date(year + 1, 0, 1);
 
-		while (date < end) {
-			array.push(
-				{
-					date: date.toDateString(),
-					completedKata: []
-				}
-			)
-			date.setDate(date.getDate() + 1)
+		for (let date = start; date < end; date.setDate(date.getDate() + 1)) {
+			days.push({
+				date: date.toDateString(),
+				completedKata: [],
+			});
 		}
 
-		return array
+		return days;
 	}
 
 	formattingArray(array: any): Kata[] {
@@ -91,10 +87,6 @@ export class CalendarComponent implements OnInit {
 				completedAt: new Date(item.completedAt).toDateString()
 			}
 		})
-	}
-
-	daysInYear(year: number): daysCount {
-		return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
 	}
 
 }
