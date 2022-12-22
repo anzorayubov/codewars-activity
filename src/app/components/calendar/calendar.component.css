@@ -78,30 +78,3 @@ div {
     opacity: 1;
 }
 
-/*.tooltip-text {*/
-/*    visibility: hidden;*/
-/*    position: fixed;*/
-/*    z-index: 3;*/
-/*    width: 100px;*/
-/*    color: white;*/
-/*    font-size: 12px;*/
-/*    background-color: #192733;*/
-/*    border-radius: 10px;*/
-/*    padding: 10px 15px 10px 15px;*/
-
-/*}*/
-
-/*.day:hover .tooltip-text {*/
-/*    visibility: visible;*/
-/*}*/
-
-/*#top {*/
-/*    top: 1px;*/
-/*}*/
-
-/*.hover-text {*/
-/*    position: relative;*/
-/*    display: inline-block;*/
-/*    text-align: center;*/
-/*    z-index: 2;*/
-/*}*/
