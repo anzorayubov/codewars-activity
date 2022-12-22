@@ -1,5 +1,7 @@
-<div class="years">
-  <div class="year" *ngFor="let year of years">
+<div class="years" [ngClass]="years.length > 0 ? 'visible' : ''">
+  <div
+    class="year"
+    *ngFor="let year of years">
     <span>{{year[0].year}}</span>
     <div class="month">
       <p>Jan</p>
@@ -17,13 +19,13 @@
     </div>
     <div class="days">
       <div
+        class="day"
+        *ngFor="let day of year[0].days"
         [ngClass]="[
         day.completedKata.length > 0 ? 'hasKata' : '',
         day.completedKata.length > 3 ? 'hasKata-2' : '',
         day.completedKata.length > 4 ? 'hasKata-3' : '',
-        day.completedKata.length > 6 ? 'hasKata-4' : '']"
-        class="day"
-        *ngFor="let day of year[0].days">
+        day.completedKata.length > 6 ? 'hasKata-4' : '']">
 
 <!--        <div class="hover-text" >-->
 <!--          <span class="tooltip-text" id="top">-->

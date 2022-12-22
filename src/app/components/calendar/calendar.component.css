@@ -2,6 +2,11 @@ div {
     z-index: 1;
 }
 
+.years {
+    opacity: 0;
+    transition: all 500ms;
+}
+
 .year {
     border: 1px solid gray;
     border-radius: 20px;
@@ -67,6 +72,10 @@ div {
 
 .kata-description {
     position: absolute;
+}
+
+.visible {
+    opacity: 1;
 }
 
 /*.tooltip-text {*/
