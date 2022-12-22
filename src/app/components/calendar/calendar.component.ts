@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {debounceTime, fromEvent} from "rxjs";
+import {CodewarsResponse, daysCount, Kata} from "../../interfaces";
 
 @Component({
 	selector: 'app-calendar',
@@ -12,10 +13,8 @@ export class CalendarComponent implements OnInit {
 
 	constructor(
 		public dataService: DataService,
-		private userName: UserNameStorageService) {
-	}
+		private userName: UserNameStorageService) {}
 
-	public katas: any[] = [];
 	public years: any = [];
 
 	ngOnInit() {
@@ -34,18 +33,18 @@ export class CalendarComponent implements OnInit {
 			})
 	}
 
-	getData() {
-		this.dataService.getKatas().subscribe((response: any) => {
-			this.katas = this.formattingArray(response.data)
+	getData(): void {
+		this.dataService.getKatas().subscribe((response: CodewarsResponse) => {
 
+			let katas = this.formattingArray(response.data)
 			let years = {}
 
-			this.katas.forEach((item: any) => {
+			katas.forEach((item: Kata) => {
 				const year = new Date(item.completedAt).getFullYear()
 				years[year] = {completedKata: []}
 			})
 
-			this.katas.forEach((item: any) => {
+			katas.forEach((item: Kata) => {
 				const year = new Date(item.completedAt).getFullYear()
 				years[year].completedKata.push(item)
 			})
@@ -67,7 +66,7 @@ export class CalendarComponent implements OnInit {
 
 			this.years.forEach(year => {
 				year[0].days.forEach(day => {
-					year[0].completedKata.forEach(kata => {
+					year[0].completedKata.forEach((kata: Kata) => {
 						if (day.date === kata.completedAt) {
 							day.completedKata.push(kata)
 						}
@@ -77,7 +76,7 @@ export class CalendarComponent implements OnInit {
 		})
 	}
 
-	getDaysInYear(year) {
+	getDaysInYear(year): string[] {
 		const date = new Date(year, 0, 1);
 		const end = new Date(date);
 		const array = []
@@ -96,7 +95,7 @@ export class CalendarComponent implements OnInit {
 		return array
 	}
 
-	formattingArray(array: any) {
+	formattingArray(array: any): Kata[] {
 		return array.map((item: any) => {
 			return {
 				name: item.name,
@@ -105,9 +104,8 @@ export class CalendarComponent implements OnInit {
 		})
 	}
 
-	daysInYear(year: number): number {
+	daysInYear(year: number): daysCount {
 		return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
 	}
-
 
 }

@@ -7,11 +7,11 @@ export class UserNameStorageService {
 
   constructor() { }
 
-  setUserNameToStorage(name) {
+  setUserNameToStorage(name: string): void {
     localStorage.setItem('userName', name)
   }
 
-  getUserName() {
+  getUserName(): string {
     return localStorage.getItem('userName')
   }
 
