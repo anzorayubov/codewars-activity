@@ -1,6 +1,9 @@
 This app allows you visualize the CodeWars activity as graph like in GitHub. Just write your username and you will see the result.
+<br>
 
+<img width="1431" alt="screenshot" src="https://user-images.githubusercontent.com/48889137/209139896-32c1cbd5-4a3e-4d2f-b882-652749d20b5b.png">
 
+<br>
 
 ## Development server
 
