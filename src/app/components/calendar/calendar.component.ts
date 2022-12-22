@@ -35,45 +35,34 @@ export class CalendarComponent implements OnInit {
 
 	getData(): void {
 		this.dataService.getKatas().subscribe((response: CodewarsResponse) => {
+			const katas = this.formattingArray(response.data);
+			const completedKataByYear = new Map();
 
-			let katas = this.formattingArray(response.data)
-			let years = {}
-
-			katas.forEach((item: Kata) => {
-				const year = new Date(item.completedAt).getFullYear()
-				years[year] = {completedKata: []}
-			})
-
-			katas.forEach((item: Kata) => {
-				const year = new Date(item.completedAt).getFullYear()
-				years[year].completedKata.push(item)
-			})
-
-			for (let year in years) {
-				this.years.unshift(
-					[{
-						year: year,
-						completedKata: years[year].completedKata,
-						dayInYear: this.daysInYear(+year),
-						days: []
-					}]
-				)
+			for (const kata of katas) {
+				const year = new Date(kata.completedAt).getFullYear();
+				if (!completedKataByYear.has(year)) {
+					completedKataByYear.set(year, []);
+				}
+				completedKataByYear.get(year).push(kata);
 			}
 
-			this.years.forEach(year => {
-				year[0].days = this.getDaysInYear(year[0].year)
-			})
+			for (const [year, completedKata] of completedKataByYear) {
+				const daysInYear = this.getDaysInYear(+year);
+				this.years.push([{
+					year: year,
+					completedKata: completedKata,
+					dayInYear: daysInYear.length,
+					days: daysInYear,
+				}]);
+			}
 
-			this.years.forEach(year => {
-				year[0].days.forEach(day => {
-					year[0].completedKata.forEach((kata: Kata) => {
-						if (day.date === kata.completedAt) {
-							day.completedKata.push(kata)
-						}
-					})
-				})
-			})
-		})
+			for (const year of this.years) {
+				for (const day of year[0].days) {
+					day.completedKata = completedKataByYear.get(year[0].year)
+						.filter(kata => day.date === kata.completedAt);
+				}
+			}
+		});
 	}
 
 	getDaysInYear(year): string[] {
