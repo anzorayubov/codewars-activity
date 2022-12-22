@@ -11,6 +11,7 @@ div {
     border: 1px solid gray;
     border-radius: 20px;
     width: 82vw;
+    max-width: 1200px;
     margin-bottom: 30px;
     background-color: #fff;
     padding: 10px 6px 6px 6px;
