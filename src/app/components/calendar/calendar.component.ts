@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
+import {UserNameStorageService} from "../../services/user-name-storage.service";
+import {debounceTime, fromEvent} from "rxjs";
 
 @Component({
 	selector: 'app-calendar',
@@ -8,7 +10,9 @@ import {DataService} from "../../services/data.service";
 })
 export class CalendarComponent implements OnInit {
 
-	constructor(public dataService: DataService) {
+	constructor(
+		public dataService: DataService,
+		private userName: UserNameStorageService) {
 	}
 
 	public katas: any[] = [];
@@ -16,6 +20,21 @@ export class CalendarComponent implements OnInit {
 
 	ngOnInit() {
 
+		this.getData()
+		const input = document.querySelector('.userName')
+
+		fromEvent(input, 'keyup')
+			.pipe(
+				debounceTime(1000)
+			)
+			.subscribe((event: any) => {
+				this.userName.setUserNameToStorage(event.target.value.trim())
+				this.getData()
+				this.years = []
+			})
+	}
+
+	getData() {
 		this.dataService.getKatas().subscribe((response: any) => {
 			this.katas = this.formattingArray(response.data)
 
@@ -29,7 +48,6 @@ export class CalendarComponent implements OnInit {
 			this.katas.forEach((item: any) => {
 				const year = new Date(item.completedAt).getFullYear()
 				years[year].completedKata.push(item)
-
 			})
 
 			for (let year in years) {
@@ -45,17 +63,9 @@ export class CalendarComponent implements OnInit {
 
 			this.years.forEach(year => {
 				year[0].days = this.getDaysInYear(year[0].year)
-				console.log(year[0])
 			})
 
-
 			this.years.forEach(year => {
-
-				console.log(
-					year[0].days,
-					year[0].completedKata
-				)
-
 				year[0].days.forEach(day => {
 					year[0].completedKata.forEach(kata => {
 						if (day.date === kata.completedAt) {
@@ -65,7 +75,6 @@ export class CalendarComponent implements OnInit {
 				})
 			})
 		})
-
 	}
 
 	getDaysInYear(year) {

@@ -50,42 +50,49 @@ div {
 }
 
 .hasKata {
-    background-color: #1976d2;
+    background-color: #b6e3ff;
 }
 
-.hasTwoKata {
-    background-color: #004277;
+.hasKata-2 {
+    background-color: #54aeff;
+}
+
+.hasKata-3 {
+    background-color: #0969da;
+}
+
+.hasKata-4 {
+    background-color: #034594;
 }
 
 .kata-description {
     position: absolute;
 }
 
-.tooltip-text {
-    visibility: hidden;
-    position: fixed;
-    z-index: 3;
-    width: 100px;
-    color: white;
-    font-size: 12px;
-    background-color: #192733;
-    border-radius: 10px;
-    padding: 10px 15px 10px 15px;
+/*.tooltip-text {*/
+/*    visibility: hidden;*/
+/*    position: fixed;*/
+/*    z-index: 3;*/
+/*    width: 100px;*/
+/*    color: white;*/
+/*    font-size: 12px;*/
+/*    background-color: #192733;*/
+/*    border-radius: 10px;*/
+/*    padding: 10px 15px 10px 15px;*/
 
-}
+/*}*/
 
-.day:hover .tooltip-text {
-    visibility: visible;
-}
+/*.day:hover .tooltip-text {*/
+/*    visibility: visible;*/
+/*}*/
 
-#top {
-    top: 1px;
-}
+/*#top {*/
+/*    top: 1px;*/
+/*}*/
 
-.hover-text {
-    position: relative;
-    display: inline-block;
-    /*margin: 40px;*/
-    text-align: center;
-    z-index: 2;
-}
+/*.hover-text {*/
+/*    position: relative;*/
+/*    display: inline-block;*/
+/*    text-align: center;*/
+/*    z-index: 2;*/
+/*}*/

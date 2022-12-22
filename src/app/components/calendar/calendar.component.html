@@ -18,17 +18,18 @@
     <div class="days">
       <div
         [ngClass]="[
-        day.completedKata.length > 3 ? 'hasTwoKata' : '',
-        day.completedKata.length > 0 ? 'hasKata' : '']"
-
+        day.completedKata.length > 0 ? 'hasKata' : '',
+        day.completedKata.length > 3 ? 'hasKata-2' : '',
+        day.completedKata.length > 4 ? 'hasKata-3' : '',
+        day.completedKata.length > 6 ? 'hasKata-4' : '']"
         class="day"
         *ngFor="let day of year[0].days">
 
-        <div class="hover-text" >
-          <span class="tooltip-text" id="top">
-            <span *ngFor="let kata of day.completedKata">{{kata.completedAt}}</span>
-          </span>
-        </div>
+<!--        <div class="hover-text" >-->
+<!--          <span class="tooltip-text" id="top">-->
+<!--            <span *ngFor="let kata of day.completedKata">{{kata.completedAt}}</span>-->
+<!--          </span>-->
+<!--        </div>-->
 
       </div>
     </div>
