@@ -26,4 +26,27 @@ jobs:
       run: |
         npm install
         npx webpack
-        ng build
+        
+        - name: Cache node modules
+          id: cache-nodemodules
+          uses: actions/cache@v2
+          env:
+            cache-name: cache-node-modules
+          with:
+            # caching node_modules
+            path: node_modules # 👈 path for node_modules folder
+            key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+            # 👆 name of the chache key includes package-lock.json
+            restore-keys: |
+              ${{ runner.os }}-build-${{ env.cache-name }}-
+              ${{ runner.os }}-build-
+              ${{ runner.os }}-
+
+          - name: Install Dependencies
+          if:
+            steps.cache-nodemodules.outputs.cache-hit != 'true'
+            # 👆 if cache hits the skip this step.
+          run: npm ci
+          
+          - name: Build
+           run: npm run build
