@@ -1,0 +1,29 @@
+name: Angualr deploy
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        uses: actions/checkout@v3
+        
+      - name: Setup Pages
+        run: npm ci
+        
+      - name: build
+        run: npm run build
+        
+      - name: Upload artifact
+        uses: upload-artifact@v3
+        with: 
+          path: dist/codewars
+          name: build file
+
+# - uses: actions/upload-artifact@v3
+#   with:
+#     name: my-artifact
+#     path: path/to/artifact/world.txt
