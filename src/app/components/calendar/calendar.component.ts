@@ -14,6 +14,7 @@ export class CalendarComponent implements OnInit {
 	constructor(
 		public dataService: DataService,
 		private userName: UserNameStorageService) {}
+		public beforeMonday = []
 
 	public years: any = [];
 
@@ -56,6 +57,8 @@ export class CalendarComponent implements OnInit {
 				}]);
 			}
 
+			// console.log(...this.years[0])
+
 			for (const year of this.years) {
 				for (const day of year[0].days) {
 					day.completedKata = completedKataByYear.get(year[0].year)
@@ -69,14 +72,29 @@ export class CalendarComponent implements OnInit {
 		const days = [];
 		const start = new Date(year, 0, 1);
 		const end = new Date(year + 1, 0, 1);
+		let isFirstMonday = false;
 
 		for (let date = start; date < end; date.setDate(date.getDate() + 1)) {
-			days.push({
-				date: date.toDateString(),
-				completedKata: [],
-			});
-		}
 
+			if(start.toDateString().split(' ',1)[0] === 'Mon') {
+				isFirstMonday = true
+
+			}
+
+ 			if(isFirstMonday) {
+				days.push({
+					date: date.toDateString(),
+					completedKata: [],
+				});
+			} else {
+				this.beforeMonday.push({
+					date: date.toDateString(),
+					completedKata: [],
+				});
+			}
+
+		}
+		console.log(this.beforeMonday)
 		return days;
 	}
 
