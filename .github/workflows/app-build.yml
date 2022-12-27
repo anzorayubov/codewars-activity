@@ -20,11 +20,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with: 
-          path: dist/codewars
+          path: docs
           name: build file
-          
-#           source: ./dist/codewars
-          destination: ./docs
           
   deploy:
     needs: build
@@ -33,6 +30,6 @@ jobs:
       - name: Get build project 
         uses: actions/download-artifact@v3
         with: 
-          path: build files
+          path: build file
           
     
