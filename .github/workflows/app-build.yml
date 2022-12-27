@@ -18,7 +18,7 @@ jobs:
         run: npm run build
         
       - name: Upload artifact
-        uses: upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with: 
           path: dist/codewars
           name: build file
