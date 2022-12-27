@@ -6,12 +6,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: install dependences
+      - name: install dependencies
         run: npm ci
-      - name: bild the project
+      - name: build the project
         run: npm run build
       - name: Upload artifact
         uses: upload-artifact@v3
         with:
           path: dist/codewars
-          name: builded file
+          name: build file
