@@ -1,7 +1,7 @@
 name: Angular deploy
 on: [push, workflow_dispatch]
 jobs:
-	build_app:
+	build:
 		runs-on: ubuntu-latest
 		steps:
 			- name: Get code
