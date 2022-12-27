@@ -28,9 +28,9 @@
         day.completedKata.length > 6 ? 'hasKata-4' : '']">
 
         <div class="hover-text">
-          <span class="tooltip-text" id="top">
+          <span class="tooltip-text">
             <span>{{day.date}}</span>
-            <span class="kataName" *ngFor="let kata of day.completedKata">{{kata.name}}</span>
+            <span class="kataName" *ngFor="let kata of day.completedKata">- {{kata.name}}</span>
           </span>
         </div>
 
