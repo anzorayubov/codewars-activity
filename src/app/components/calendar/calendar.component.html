@@ -29,7 +29,7 @@
 
         <div class="hover-text">
           <span class="tooltip-text">
-            <span>{{day.date}}</span>
+            <span>{{day.date | date: 'EEE dd MMM '}}</span>
             <span class="kataName" *ngFor="let kata of day.completedKata">- {{kata.name}}</span>
           </span>
         </div>
