@@ -22,8 +22,13 @@ jobs:
         with: 
           path: dist/codewars
           name: build file
-
-# - uses: actions/upload-artifact@v3
-#   with:
-#     name: my-artifact
-#     path: path/to/artifact/world.txt
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Get build project 
+        uses: actions/download-artifact@v3
+        with: 
+          path: build files
+          
+    
