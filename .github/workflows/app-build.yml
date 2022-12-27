@@ -22,6 +22,10 @@ jobs:
         with: 
           path: dist/codewars
           name: build file
+          
+#           source: ./dist/codewars
+          destination: ./docs
+          
   deploy:
     needs: build
     runs-on: ubuntu-latest
