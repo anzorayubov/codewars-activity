@@ -1,21 +1,17 @@
 name: Angular deploy
-on: [push, workflow_dispatch]
+on: [ push, workflow_dispatch ]
 jobs:
-	build:
-		runs-on: ubuntu-latest
-		steps:
-			- name: Get code
-				uses: actions/checkout@v3
-			- name: Install dependences
-				run: npm ci
-			- name: build the project
-				run: npm run build
-			- name: Upload artifact
-				uses: upload-artifact@v3
-				with: 
-					path: dist/codewars
-					name: builded file
-					
-      
-    
-  
+  build_app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: install dependences
+        run: npm ci
+      - name: bild the project
+        run: npm run build
+      - name: Upload artifact
+        uses: upload-artifact@v3
+        with:
+          path: dist/codewars
+          name: builded file
