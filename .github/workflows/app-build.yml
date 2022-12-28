@@ -24,7 +24,7 @@ jobs:
           name: build-file
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ~docs
+        working-directory: docs
           
   deploy:
     needs: build
