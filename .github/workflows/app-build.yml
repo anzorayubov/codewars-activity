@@ -11,17 +11,20 @@ jobs:
       - name: Install dependencies
         uses: actions/checkout@v3
         
-      - name: Setup Pages
+      - name: Dowload depds
         run: npm ci
         
-      - name: build
+      - name: run build
         run: npm run build
         
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with: 
-          path: docs/codewars
+          path: docs
           name: build-file
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ~docs
           
   deploy:
     needs: build
