@@ -20,7 +20,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with: 
-          path: path/to/artifact
+          path: docs/codewars
           name: build-file
           
   deploy:
