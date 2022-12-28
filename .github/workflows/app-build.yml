@@ -1,38 +1,28 @@
-name: Angualr deploy
+name: Github Pages Deploy
+
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
-  
+    branches:
+      - "master"
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Install dependencies
-        uses: actions/checkout@v3
-        
-      - name: Dowload depds
-        run: npm ci
-        
-      - name: run build
-        run: npm run build
-        
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with: 
-          path: docs
-          name: build-file
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: docs
-          
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Get build project 
-        uses: actions/download-artifact@v3
-        with: 
-          path: build-file
-          
+
+    strategy:
+      matrix:
+        node-version: [14.17]
     
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Install and build
+        working-directory: ./codewars-activity
+        run: npm install && npm run gh-build && cp dist/codewars/index.html dist/codewars/404.html
+      
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          branch: main
+          folder: docs # The folder the action should deploy.       
