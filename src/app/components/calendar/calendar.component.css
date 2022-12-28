@@ -15,10 +15,12 @@
 }
 
 .year > span {
-    position: absolute;
+    display: flex;
+    justify-content: space-between;
     right: 50%;
     top: 0;
     color: gray;
+    margin: -6px 8px 0 8px;
 }
 
 .days {
@@ -33,7 +35,6 @@
     background-color: #eeeeee;
     border-radius: 4px;
     overflow: hidden;
-    /*width: 16px;*/
     height: 16px;
     border: 1px solid lightgray;
     margin: 2px;
@@ -83,12 +84,10 @@
     }
 }
 
-
 .tooltip-text {
     visibility: hidden;
     position: absolute;
     z-index: 3;
-    /*width: 100px;*/
     color: white;
     font-size: 12px;
     background-color: #192733;
@@ -115,10 +114,4 @@
 .hover-text {
     display: inline-block;
     text-align: center;
-}
-
-.kataName {
-
-    /*margin-top: 2px;*/
-    /*padding: 2px 0;*/
 }
