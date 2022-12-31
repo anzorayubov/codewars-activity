@@ -10,16 +10,21 @@ import {CodewarsResponse} from "../interfaces";
 
 export class DataService {
 	private readonly url = 'https://www.codewars.com/api/v1/users/'
+	private readonly userInfoUrl = 'https://www.codewars.com/api/v1/users/'
 	private userName = ''
 
 	constructor(
 		private http: HttpClient,
 		private userNameService: UserNameStorageService) {
+		this.userName = this.userNameService.getUserName()
 	}
 
 	getKatas(): Observable<CodewarsResponse> {
-		this.userName = this.userNameService.getUserName()
 		return this.http.get<CodewarsResponse>(this.url + this.userName + '/code-challenges/completed')
+	}
+
+	getUserInfo() {
+		return this.http.get<CodewarsResponse>(this.userInfoUrl + this.userName)
 	}
 
 }

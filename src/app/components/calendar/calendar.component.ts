@@ -19,6 +19,9 @@ export class CalendarComponent implements OnInit {
 	public years: any = [];
 
 	ngOnInit() {
+		this.dataService.getUserInfo().subscribe(user => {
+			console.log(user)
+		})
 
 		this.getData()
 		const input = document.querySelector('.userName')
@@ -57,8 +60,6 @@ export class CalendarComponent implements OnInit {
 				}]);
 			}
 
-			// console.log(...this.years[0])
-
 			for (const year of this.years) {
 				for (const day of year[0].days) {
 					day.completedKata = completedKataByYear.get(year[0].year)
@@ -94,7 +95,6 @@ export class CalendarComponent implements OnInit {
 			}
 
 		}
-		console.log(this.beforeMonday)
 		return days;
 	}
 
