@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserNameStorageService} from "./user-name-storage.service";
 import {Observable} from "rxjs";
-import {CodewarsResponse} from "../interfaces";
+import {CodewarsResponse, UserInfo} from "../interfaces";
 
 @Injectable({
 	providedIn: 'root'
@@ -23,8 +23,8 @@ export class DataService {
 		return this.http.get<CodewarsResponse>(this.url + this.userName + '/code-challenges/completed')
 	}
 
-	getUserInfo() {
-		return this.http.get<CodewarsResponse>(this.userInfoUrl + this.userName)
+	getUserInfo(): Observable<UserInfo> {
+		return this.http.get<UserInfo>(this.userInfoUrl + this.userName)
 	}
 
 }
