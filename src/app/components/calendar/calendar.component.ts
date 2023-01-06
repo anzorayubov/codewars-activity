@@ -19,10 +19,6 @@ export class CalendarComponent implements OnInit {
 	public years: any = [];
 
 	ngOnInit() {
-		this.dataService.getUserInfo().subscribe(user => {
-			console.log(user)
-		})
-
 		this.getData()
 		const input = document.querySelector('.userName')
 
