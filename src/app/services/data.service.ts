@@ -16,14 +16,15 @@ export class DataService {
 	constructor(
 		private http: HttpClient,
 		private userNameService: UserNameStorageService) {
-		this.userName = this.userNameService.getUserName()
 	}
 
 	getKatas(): Observable<CodewarsResponse> {
+		this.userName = this.userNameService.getUserName()
 		return this.http.get<CodewarsResponse>(this.url + this.userName + '/code-challenges/completed')
 	}
 
 	getUserInfo(): Observable<UserInfo> {
+		this.userName = this.userNameService.getUserName()
 		return this.http.get<UserInfo>(this.userInfoUrl + this.userName)
 	}
 
