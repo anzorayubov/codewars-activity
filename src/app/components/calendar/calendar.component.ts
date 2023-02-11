@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
-import {debounceTime, fromEvent} from "rxjs";
+import {debounceTime, fromEvent, of, switchMap} from "rxjs";
 import {CodewarsResponse, Kata} from "../../interfaces";
 
 @Component({
@@ -13,8 +13,10 @@ export class CalendarComponent implements OnInit {
 
 	constructor(
 		public dataService: DataService,
-		private userName: UserNameStorageService) {}
-		public beforeMonday = []
+		private userName: UserNameStorageService) {
+	}
+
+	public beforeMonday = []
 
 	public years: any = [];
 
@@ -34,35 +36,37 @@ export class CalendarComponent implements OnInit {
 	}
 
 	getData(): void {
-		this.dataService.getKatas().subscribe((response: CodewarsResponse) => {
-			const katas = this.formattingArray(response.data);
-			const completedKataByYear = new Map();
+		this.dataService.getKatas()
+			.pipe(switchMap(((response: CodewarsResponse) => of(response.data))))
+			.subscribe((response: []) => {
+				const katas = this.formattingArray(response);
+				const completedKataByYear = new Map();
 
-			for (const kata of katas) {
-				const year = new Date(kata.completedAt).getFullYear();
-				if (!completedKataByYear.has(year)) {
-					completedKataByYear.set(year, []);
+				for (const kata of katas) {
+					const year = new Date(kata.completedAt).getFullYear();
+					if (!completedKataByYear.has(year)) {
+						completedKataByYear.set(year, []);
+					}
+					completedKataByYear.get(year).push(kata);
 				}
-				completedKataByYear.get(year).push(kata);
-			}
 
-			for (const [year, completedKata] of completedKataByYear) {
-				const daysInYear = this.getDaysInYear(+year);
-				this.years.push([{
-					year: year,
-					completedKata: completedKata,
-					dayInYear: daysInYear.length,
-					days: daysInYear,
-				}]);
-			}
-
-			for (const year of this.years) {
-				for (const day of year[0].days) {
-					day.completedKata = completedKataByYear.get(year[0].year)
-						.filter(kata => day.date === kata.completedAt);
+				for (const [year, completedKata] of completedKataByYear) {
+					const daysInYear = this.getDaysInYear(+year);
+					this.years.push([{
+						year: year,
+						completedKata: completedKata,
+						dayInYear: daysInYear.length,
+						days: daysInYear,
+					}]);
 				}
-			}
-		});
+
+				for (const year of this.years) {
+					for (const day of year[0].days) {
+						day.completedKata = completedKataByYear.get(year[0].year)
+							.filter(kata => day.date === kata.completedAt);
+					}
+				}
+			});
 	}
 
 	getDaysInYear(year: number) {
@@ -73,12 +77,12 @@ export class CalendarComponent implements OnInit {
 
 		for (let date = start; date < end; date.setDate(date.getDate() + 1)) {
 
-			if(start.toDateString().split(' ',1)[0] === 'Mon') {
+			if (start.toDateString().split(' ', 1)[0] === 'Mon') {
 				isFirstMonday = true
 
 			}
 
- 			if(isFirstMonday) {
+			if (isFirstMonday) {
 				days.push({
 					date: date.toDateString(),
 					completedKata: [],
