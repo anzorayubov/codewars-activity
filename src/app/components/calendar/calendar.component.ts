@@ -35,10 +35,8 @@ export class CalendarComponent implements OnInit {
 	}
 
 	getData(): void {
-		this.dataService.getKatas()
-			.pipe(switchMap(((response: CodewarsResponse) => of(response.data))))
-			.subscribe((response: []) => {
-				this.setData(response);
+		this.dataService.getKatas().subscribe((response: any) => {
+				this.setData(response.data);
 			});
 	}
 
