@@ -34,7 +34,7 @@ export class CalendarComponent implements OnInit {
 			})
 	}
 
-	getData(): void {
+	private getData(): void {
 		this.dataService.getKatas().subscribe((response: any) => {
 				this.setData(response.data);
 			});
@@ -70,7 +70,7 @@ export class CalendarComponent implements OnInit {
 		}
 	}
 
-	getDaysInYear(year: number) {
+	private getDaysInYear(year: number) {
 		const days = [];
 		const start = new Date(year, 0, 1);
 		const end = new Date(year + 1, 0, 1);
@@ -99,7 +99,7 @@ export class CalendarComponent implements OnInit {
 		return days;
 	}
 
-	formattingArray(array: any): Kata[] {
+	private formattingArray(array: any): Kata[] {
 		return array.map((item: any) => {
 			return {
 				name: item.name,
