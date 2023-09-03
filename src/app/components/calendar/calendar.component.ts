@@ -30,13 +30,14 @@ export class CalendarComponent implements OnInit {
 			.pipe(
 				debounceTime(1000),
 				tap(() => this.userName.saveUserName(input.value.trim())),
-				switchMap((v) => {
-					return this.dataService.getKatas().pipe(
-						catchError(err => {
-							this.years = []
-							return of({data: []})
-						})
-					)
+				switchMap(() => {
+					return this.dataService.getKatas()
+						.pipe(
+							catchError(() => {
+								this.years = []
+								return of({data: []})
+							})
+						)
 				})
 			)
 			.subscribe((response: any) => {
