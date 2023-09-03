@@ -17,7 +17,6 @@ export class CalendarComponent implements OnInit {
 	}
 
 	public beforeMonday = []
-
 	public years: any = [];
 
 	ngOnInit() {
@@ -39,34 +38,38 @@ export class CalendarComponent implements OnInit {
 		this.dataService.getKatas()
 			.pipe(switchMap(((response: CodewarsResponse) => of(response.data))))
 			.subscribe((response: []) => {
-				const katas = this.formattingArray(response);
-				const completedKataByYear = new Map();
-
-				for (const kata of katas) {
-					const year = new Date(kata.completedAt).getFullYear();
-					if (!completedKataByYear.has(year)) {
-						completedKataByYear.set(year, []);
-					}
-					completedKataByYear.get(year).push(kata);
-				}
-
-				for (const [year, completedKata] of completedKataByYear) {
-					const daysInYear = this.getDaysInYear(+year);
-					this.years.push([{
-						year: year,
-						completedKata: completedKata,
-						dayInYear: daysInYear.length,
-						days: daysInYear,
-					}]);
-				}
-
-				for (const year of this.years) {
-					for (const day of year[0].days) {
-						day.completedKata = completedKataByYear.get(year[0].year)
-							.filter(kata => day.date === kata.completedAt);
-					}
-				}
+				this.setData(response);
 			});
+	}
+
+	private setData(response: []) {
+		const katas = this.formattingArray(response);
+		const completedKataByYear = new Map();
+
+		for (const kata of katas) {
+			const year = new Date(kata.completedAt).getFullYear();
+			if (!completedKataByYear.has(year)) {
+				completedKataByYear.set(year, []);
+			}
+			completedKataByYear.get(year).push(kata);
+		}
+
+		for (const [year, completedKata] of completedKataByYear) {
+			const daysInYear = this.getDaysInYear(+year);
+			this.years.push([{
+				year: year,
+				completedKata: completedKata,
+				dayInYear: daysInYear.length,
+				days: daysInYear,
+			}]);
+		}
+
+		for (const year of this.years) {
+			for (const day of year[0].days) {
+				day.completedKata = completedKataByYear.get(year[0].year)
+					.filter(kata => day.date === kata.completedAt);
+			}
+		}
 	}
 
 	getDaysInYear(year: number) {
