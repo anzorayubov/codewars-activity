@@ -22,7 +22,7 @@ export class CalendarComponent implements OnInit {
 
 	ngOnInit() {
 		this.getData()
-		const input = document.querySelector('.userName')
+		const input: HTMLInputElement = document.querySelector('.userName')
 
 		fromEvent(input, 'keyup')
 			.pipe(
