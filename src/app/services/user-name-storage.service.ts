@@ -7,7 +7,7 @@ export class UserNameStorageService {
 
   constructor() { }
 
-  setUserNameToStorage(name: string): void {
+  saveUserName(name: string): void {
     localStorage.setItem('userName', name)
   }
 

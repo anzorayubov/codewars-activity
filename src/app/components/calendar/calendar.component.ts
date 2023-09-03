@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
-import {debounceTime, fromEvent, of, switchMap, tap} from "rxjs";
-import {CodewarsResponse, Kata} from "../../interfaces";
+import {catchError, debounceTime, fromEvent, of, switchMap, tap} from "rxjs";
+import {Kata} from "../../interfaces";
 
 @Component({
 	selector: 'app-calendar',
@@ -20,27 +20,31 @@ export class CalendarComponent implements OnInit {
 	public years: any = [];
 
 	ngOnInit() {
-		this.getData()
+		this.dataService.getKatas().subscribe((response: any) => {
+			this.setData(response.data);
+		});
+
 		const input: HTMLInputElement = document.querySelector('.userName')
 
 		fromEvent(input, 'keyup')
 			.pipe(
 				debounceTime(1000),
-				tap(() => this.userName.setUserNameToStorage(input.value.trim()))
+				tap(() => this.userName.saveUserName(input.value.trim())),
+				switchMap((v) => {
+					return this.dataService.getKatas().pipe(
+						catchError(err => {
+							this.years = []
+							return of({data: []})
+						})
+					)
+				})
 			)
-			.subscribe((event: any) => {
-				this.getData()
-				this.years = []
+			.subscribe((response: any) => {
+				this.setData(response.data);
 			})
 	}
 
-	private getData(): void {
-		this.dataService.getKatas().subscribe((response: any) => {
-				this.setData(response.data);
-			});
-	}
-
-	private setData(response: []) {
+	private setData(response: Kata[]) {
 		const katas = this.formattingArray(response);
 		const completedKataByYear = new Map();
 
