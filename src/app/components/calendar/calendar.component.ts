@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
-import {debounceTime, fromEvent, of, switchMap} from "rxjs";
+import {debounceTime, fromEvent, of, switchMap, tap} from "rxjs";
 import {CodewarsResponse, Kata} from "../../interfaces";
 
 @Component({
@@ -25,10 +25,10 @@ export class CalendarComponent implements OnInit {
 
 		fromEvent(input, 'keyup')
 			.pipe(
-				debounceTime(1000)
+				debounceTime(1000),
+				tap(() => this.userName.setUserNameToStorage(input.value.trim()))
 			)
 			.subscribe((event: any) => {
-				this.userName.setUserNameToStorage(event.target.value.trim())
 				this.getData()
 				this.years = []
 			})
