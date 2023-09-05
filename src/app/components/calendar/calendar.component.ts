@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {catchError, debounceTime, fromEvent, of, Subscription, switchMap, tap} from "rxjs";
 import {Kata} from "../../interfaces";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
 	selector: 'app-calendar',
@@ -12,27 +13,32 @@ import {Kata} from "../../interfaces";
 export class CalendarComponent implements OnInit, OnDestroy {
 
 	constructor(
-		public dataService: DataService,
 		private userName: UserNameStorageService) {
 	}
 
+	public dataService = inject(DataService)
 	public beforeMonday = []
 	public years: any = [];
 	private subscriptions: Subscription
+	private destroyRef = inject(DestroyRef);
 
 	ngOnInit() {
-		const subscription1 = this.dataService.getKatas().subscribe((response: any) => {
-			this.setData(response.data);
-		});
 
-		this.subscriptions.add(subscription1)
+		this.dataService.getKatas()
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((response: any) => {
+				this.setData(response.data);
+			});
 
 		const input: HTMLInputElement = document.querySelector('.userName')
 
-		const subscription2 = fromEvent(input, 'keyup')
+		fromEvent(input, 'keyup')
 			.pipe(
 				debounceTime(1000),
 				tap(() => this.userName.saveUserName(input.value.trim())),
+				takeUntilDestroyed(this.destroyRef),
 				switchMap(() => {
 					return this.dataService.getKatas()
 						.pipe(
@@ -46,9 +52,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
 			.subscribe((response: any) => {
 				this.setData(response.data);
 			})
-
-		this.subscriptions.add(subscription2)
-
 	}
 
 	private setData(response: Kata[]) {

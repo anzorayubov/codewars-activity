@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {DataService} from "../../services/data.service";
 import {UserInfo} from "../../interfaces";
 import {Subscription} from "rxjs";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
 	selector: 'app-header',
@@ -13,12 +14,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 	userInfo: UserInfo
 	subscription: Subscription
+	private dataService = inject(DataService)
+	public userName = inject(UserNameStorageService)
+	private destroyRef = inject(DestroyRef);
 
-	constructor(public userName: UserNameStorageService, public dataService: DataService) {
+	constructor() {
 	}
 
 	ngOnInit(): void {
-		this.subscription = this.dataService.getUserInfo().subscribe((user: UserInfo) => {
+		this.subscription = this.dataService.getUserInfo()
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((user: UserInfo) => {
 			this.userInfo = user
 		})
 	}
