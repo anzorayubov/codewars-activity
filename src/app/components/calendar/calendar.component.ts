@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {UserNameStorageService} from "../../services/user-name-storage.service";
-import {catchError, debounceTime, fromEvent, of, switchMap, tap} from "rxjs";
+import {catchError, debounceTime, fromEvent, of, Subscription, switchMap, tap} from "rxjs";
 import {Kata} from "../../interfaces";
 
 @Component({
@@ -9,7 +9,7 @@ import {Kata} from "../../interfaces";
 	templateUrl: './calendar.component.html',
 	styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
 
 	constructor(
 		public dataService: DataService,
@@ -18,15 +18,18 @@ export class CalendarComponent implements OnInit {
 
 	public beforeMonday = []
 	public years: any = [];
+	private subscriptions: Subscription
 
 	ngOnInit() {
-		this.dataService.getKatas().subscribe((response: any) => {
+		const subscription1 = this.dataService.getKatas().subscribe((response: any) => {
 			this.setData(response.data);
 		});
 
+		this.subscriptions.add(subscription1)
+
 		const input: HTMLInputElement = document.querySelector('.userName')
 
-		fromEvent(input, 'keyup')
+		const subscription2 = fromEvent(input, 'keyup')
 			.pipe(
 				debounceTime(1000),
 				tap(() => this.userName.saveUserName(input.value.trim())),
@@ -43,6 +46,9 @@ export class CalendarComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.setData(response.data);
 			})
+
+		this.subscriptions.add(subscription2)
+
 	}
 
 	private setData(response: Kata[]) {
@@ -111,6 +117,10 @@ export class CalendarComponent implements OnInit {
 				completedAt: new Date(item.completedAt).toDateString()
 			}
 		})
+	}
+
+	ngOnDestroy(): void {
+		this.subscriptions.unsubscribe()
 	}
 
 }
