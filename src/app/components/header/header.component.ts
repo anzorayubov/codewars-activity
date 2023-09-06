@@ -12,10 +12,10 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-	userInfo: UserInfo
-	subscription: Subscription
+	public userInfo: UserInfo
+	private subscription: Subscription
 	private dataService = inject(DataService)
-	public userName = inject(UserNameStorageService)
+	public userName = inject(UserNameStorageService).getUserName()
 	private destroyRef = inject(DestroyRef);
 
 	constructor() {
@@ -27,8 +27,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe((user: UserInfo) => {
-			this.userInfo = user
-		})
+				this.userInfo = user
+			})
 	}
 
 	ngOnDestroy(): void {
