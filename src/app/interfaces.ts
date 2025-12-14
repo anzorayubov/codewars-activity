@@ -5,7 +5,7 @@ export interface CodewarsResponse {
 }
 
 export interface Kata {
-	completedAt: Date
+	completedAt: Date | string  // Date от API, string после форматирования
 	name: string
 	completedLanguages?: []
 	id?: number
@@ -38,4 +38,17 @@ export interface UserInfo {
 	}
 	skills: null
 	username: string
+}
+
+export interface CalendarDay {
+	isPlaceholder: boolean
+	date: string | null  // Format: YYYY-MM-DD in local timezone
+	completedKata: Kata[]
+}
+
+export interface YearData {
+	year: number
+	completedKata: Kata[]
+	dayInYear: number
+	days: CalendarDay[]
 }

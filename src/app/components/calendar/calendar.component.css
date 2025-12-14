@@ -1,117 +1,133 @@
 .years {
-    opacity: 0;
-    transition: all 500ms;
+  opacity: 0;
+  transition: all 500ms;
 }
 
 .year {
-    border: 1px solid gray;
-    border-radius: 20px;
-    width: 82vw;
-    max-width: 1200px;
-    margin-bottom: 30px;
-    background-color: #fff;
-    padding: 10px 6px 6px 6px;
-    position: relative;
+  border: 1px solid gray;
+  border-radius: 20px;
+  width: 82vw;
+  max-width: 1200px;
+  margin-bottom: 30px;
+  background-color: #fff;
+  padding: 10px 6px 6px 6px;
+  position: relative;
 }
 
 .year > span {
-    display: flex;
-    justify-content: space-between;
-    right: 50%;
-    top: 0;
-    color: gray;
-    margin: -6px 8px 0 8px;
+  display: flex;
+  justify-content: space-between;
+  right: 50%;
+  top: 0;
+  color: gray;
+  margin: -6px 8px 0 8px;
 }
 
 .days {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 160px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 160px;
+  justify-content: end;
 }
 
 .day {
-    background-color: #eeeeee;
-    border-radius: 4px;
-    overflow: hidden;
-    height: 16px;
-    border: 1px solid lightgray;
-    margin: 2px;
-    text-align: center;
-    font-size: 8px;
+  background-color: #eeeeee;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 16px;
+  height: 16px;
+  border: 1px solid lightgray;
+  margin: 2px;
+  text-align: center;
+  font-size: 8px;
 }
 
 .day:hover {
-    box-shadow: 0 0 4px #1976d2;
+  box-shadow: 0 0 4px #1976d2;
+}
+
+.day-placeholder {
+  background-color: transparent;
+  border: none;
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+  pointer-events: none;
 }
 
 .month {
-    background-color: #ffffff;
-    display: flex;
-    justify-content: space-around;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-around;
 }
 
 .hasKata {
-    background-color: #b6e3ff;
+  background-color: #b6e3ff;
 }
 
 .hasKata-2 {
-    background-color: #54aeff;
+  background-color: #54aeff;
 }
 
 .hasKata-3 {
-    background-color: #0969da;
+  background-color: #0969da;
 }
 
 .hasKata-4 {
-    background-color: #034594;
+  background-color: #034594;
 }
 
 .kata-description {
-    position: absolute;
+  position: absolute;
 }
 
 .visible {
-    opacity: 1;
+  opacity: 1;
 }
 
 @media screen and (max-width: 800px) {
-    .day {
-        margin: 0;
-        border-radius: 0;
-        height: 20px;
-    }
+  .day {
+    margin: 0;
+    border-radius: 0;
+    height: 20px;
+  }
+
+  .day-placeholder {
+    margin: 0;
+    height: 20px;
+  }
 }
 
 .tooltip-text {
-    visibility: hidden;
-    position: absolute;
-    z-index: 3;
-    color: white;
-    font-size: 12px;
-    background-color: #192733;
-    border-radius: 10px;
-    padding: 10px 15px 10px 15px;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin-top: -50px;
-    margin-left: 14px;
+  visibility: hidden;
+  position: absolute;
+  z-index: 3;
+  color: white;
+  font-size: 12px;
+  background-color: #192733;
+  border-radius: 10px;
+  padding: 10px 15px 10px 15px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-top: -50px;
+  margin-left: 14px;
 }
 
 .tooltip-text span:first-child {
-    margin-bottom: 6px;
-    border-bottom: 1px dashed gray;
-    text-align: center;
-    padding-bottom: 4px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed gray;
+  text-align: center;
+  padding-bottom: 4px;
 }
 
 .day:hover .tooltip-text {
-    visibility: visible;
+  visibility: visible;
 }
 
 .hover-text {
-    display: inline-block;
-    text-align: center;
+  display: inline-block;
+  text-align: center;
 }
