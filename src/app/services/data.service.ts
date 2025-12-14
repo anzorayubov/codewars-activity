@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {UserNameStorageService} from "./user-name-storage.service";
 import {Observable} from "rxjs";
 import {CodewarsResponse, UserInfo} from "../interfaces";
