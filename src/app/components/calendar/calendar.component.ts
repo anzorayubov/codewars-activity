@@ -4,9 +4,10 @@ import {CodewarsResponse, Kata, YearData} from "../../interfaces";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
-	selector: 'app-calendar',
-	templateUrl: './calendar.component.html',
-	styleUrls: ['./calendar.component.css']
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.css'],
+    standalone: false
 })
 export class CalendarComponent implements OnInit {
 
