@@ -1,25 +1,26 @@
 <div class="years" [ngClass]="years.length > 0 ? 'visible' : ''">
-  <div
-    class="year"
-    *ngFor="let year of years">
-    <span>{{year[0].year}} <span>Total completed: {{year[0].completedKata.length}}</span> </span>
-    <div class="month">
-      <p>Jan</p>
-      <p>Feb</p>
-      <p>Mar</p>
-      <p>Apr</p>
-      <p>May</p>
-      <p>Jun</p>
-      <p>Jul</p>
-      <p>Aug</p>
-      <p>Sep</p>
-      <p>Oct</p>
-      <p>Nov</p>
-      <p>Dec</p>
-    </div>
-    <div class="days">
-      <div
-        *ngFor="let day of year[0].days"
+  @for (year of years; track year) {
+    <div
+      class="year"
+      >
+      <span>{{year[0].year}} <span>Total completed: {{year[0].completedKata.length}}</span> </span>
+      <div class="month">
+        <p>Jan</p>
+        <p>Feb</p>
+        <p>Mar</p>
+        <p>Apr</p>
+        <p>May</p>
+        <p>Jun</p>
+        <p>Jul</p>
+        <p>Aug</p>
+        <p>Sep</p>
+        <p>Oct</p>
+        <p>Nov</p>
+        <p>Dec</p>
+      </div>
+      <div class="days">
+        @for (day of year[0].days; track day) {
+          <div
         [ngClass]="{
           'day': !day.isPlaceholder,
           'day-placeholder': day.isPlaceholder,
@@ -28,17 +29,23 @@
           'hasKata-3': !day.isPlaceholder && day.completedKata.length > 4,
           'hasKata-4': !day.isPlaceholder && day.completedKata.length > 6
         }">
-
-        <div class="hover-text" *ngIf="!day.isPlaceholder">
-          <span class="tooltip-text">
-            <span>{{day.date | date: 'EEE dd MMM '}}</span>
-            <span class="kataName" *ngFor="let kata of day.completedKata">- {{kata.name}}</span>
-          </span>
-        </div>
-
+            @if (!day.isPlaceholder) {
+              <div class="hover-text">
+                <span class="tooltip-text">
+                  <span>{{day.date | date: 'EEE dd MMM '}}</span>
+                  @for (kata of day.completedKata; track kata) {
+                    <span class="kataName">- {{kata.name}}</span>
+                  }
+                </span>
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>
 
-<ng-template [ngIf]="years.length === 0">empty...</ng-template>
+@if (years.length === 0) {
+  empty...
+}

@@ -1,7 +1,11 @@
 <div class="toolbar" role="banner">
-  <div class="snow-container" *ngIf="isWinter">
-    <div class="snowflake" *ngFor="let flake of snowflakes; let i = index" [style.left.%]="(i * 3.33)" [style.animation-delay.s]="(i * 0.3)">❄</div>
-  </div>
+  @if (isWinter) {
+    <div class="snow-container">
+      @for (flake of snowflakes; track flake; let i = $index) {
+        <div class="snowflake" [style.left.%]="(i * 3.33)" [style.animation-delay.s]="(i * 0.3)">❄</div>
+      }
+    </div>
+  }
   <img
     width="40"
     alt="Angular Logo"
