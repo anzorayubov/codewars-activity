@@ -2,6 +2,7 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {CodewarsResponse, Kata, YearData} from "../../interfaces";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {catchError, of} from "rxjs";
 
 @Component({
     selector: 'app-calendar',
@@ -11,14 +12,15 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 })
 export class CalendarComponent implements OnInit {
 
-	public years: YearData[][] = [];
+	public years: YearData[] = [];
 	private dataService = inject(DataService);
 	private destroyRef = inject(DestroyRef);
 
 	ngOnInit(): void {
-		// Подписка на изменения данных от DataService
+		// Subscribe to data changes from DataService
 		this.dataService.getKatas()
 			.pipe(
+				catchError(() => of<CodewarsResponse>({data: [], totalItems: 0, totalPages: 0})),
 				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe((response: CodewarsResponse) => {
@@ -27,35 +29,48 @@ export class CalendarComponent implements OnInit {
 	}
 
 	private setData(response: Kata[]): void {
-		// Очищаем массив перед заполнением, чтобы избежать дублирования
+		// Clear array to avoid duplication
 		this.years = [];
 
 		const katas = this.formattingArray(response);
 		const completedKataByYear = new Map<number, Kata[]>();
+		const completedKataByDate = new Map<string, Kata[]>();
 
+		// Group kata by year and by date
 		for (const kata of katas) {
 			const year = new Date(kata.completedAt).getFullYear();
+			const date = kata.completedAt as string;
+
+			// Group by year
 			if (!completedKataByYear.has(year)) {
 				completedKataByYear.set(year, []);
 			}
 			completedKataByYear.get(year)!.push(kata);
+
+			// Group by date for O(1) lookup
+			if (!completedKataByDate.has(date)) {
+				completedKataByDate.set(date, []);
+			}
+			completedKataByDate.get(date)!.push(kata);
 		}
 
+		// Build year data structures
 		for (const [year, completedKata] of completedKataByYear) {
 			const daysInYear = this.getDaysInYear(year);
-			this.years.push([{
+
+			// Assign kata to days using O(1) Map lookup instead of O(n) filter
+			for (const day of daysInYear) {
+				if (day.date) {
+					day.completedKata = completedKataByDate.get(day.date) || [];
+				}
+			}
+
+			this.years.push({
 				year: year,
 				completedKata: completedKata,
 				dayInYear: daysInYear.length,
 				days: daysInYear,
-			}]);
-		}
-
-		for (const year of this.years) {
-			for (const day of year[0].days) {
-				day.completedKata = completedKataByYear.get(year[0].year)!
-					.filter((kata: Kata) => day.date === kata.completedAt);
-			}
+			});
 		}
 	}
 
@@ -89,8 +104,8 @@ export class CalendarComponent implements OnInit {
 		return days;
 	}
 
-	private formattingArray(array: any): Kata[] {
-		return array.map((item: any) => {
+	private formattingArray(array: Kata[]): Kata[] {
+		return array.map((item: Kata) => {
 			return {
 				name: item.name,
 				completedAt: this.normalizeToLocalDate(item.completedAt)

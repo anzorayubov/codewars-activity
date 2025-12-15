@@ -3,7 +3,7 @@
     <div
       class="year"
       >
-      <span>{{year[0].year}} <span>Total completed: {{year[0].completedKata.length}}</span> </span>
+      <span>{{year.year}} <span>Total completed: {{year.completedKata.length}}</span> </span>
       <div class="month">
         <p>Jan</p>
         <p>Feb</p>
@@ -19,7 +19,7 @@
         <p>Dec</p>
       </div>
       <div class="days">
-        @for (day of year[0].days; track day) {
+        @for (day of year.days; track day) {
           <div
         [ngClass]="{
           'day': !day.isPlaceholder,

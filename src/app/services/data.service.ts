@@ -9,23 +9,20 @@ import {CodewarsResponse, UserInfo} from "../interfaces";
 })
 
 export class DataService {
-	private readonly url = 'https://www.codewars.com/api/v1/users/'
-	private readonly userInfoUrl = 'https://www.codewars.com/api/v1/users/'
-	private userName = ''
+	private readonly baseUrl = 'https://www.codewars.com/api/v1/users/'
 	private http = inject(HttpClient)
 	private userNameService = inject(UserNameStorageService)
 
-	constructor() {
+	private get userName(): string {
+		return this.userNameService.getUserName()
 	}
 
 	getKatas(): Observable<CodewarsResponse> {
-		this.userName = this.userNameService.getUserName()
-		return this.http.get<CodewarsResponse>(this.url + this.userName + '/code-challenges/completed')
+		return this.http.get<CodewarsResponse>(`${this.baseUrl}${this.userName}/code-challenges/completed`)
 	}
 
 	getUserInfo(): Observable<UserInfo> {
-		this.userName = this.userNameService.getUserName()
-		return this.http.get<UserInfo>(this.userInfoUrl + this.userName)
+		return this.http.get<UserInfo>(`${this.baseUrl}${this.userName}`)
 	}
 
 }

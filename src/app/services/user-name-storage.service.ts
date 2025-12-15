@@ -5,14 +5,12 @@ import { Injectable } from '@angular/core';
 })
 export class UserNameStorageService {
 
-  constructor() { }
-
   saveUserName(name: string): void {
     localStorage.setItem('userName', name)
   }
 
   getUserName(): string {
-    return localStorage.getItem('userName')
+    return localStorage.getItem('userName') || ''
   }
 
 }

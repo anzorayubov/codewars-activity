@@ -2,7 +2,7 @@ import {AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild} fro
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {DataService} from "../../services/data.service";
 import {CodewarsResponse, UserInfo} from "../../interfaces";
-import {catchError, debounceTime, fromEvent, of, switchMap, tap} from "rxjs";
+import {catchError, debounceTime, filter, fromEvent, map, of, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
@@ -13,9 +13,12 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 })
 export class HeaderComponent implements AfterViewInit {
 
+	private readonly DEBOUNCE_TIME_MS = 500;
+	private readonly SNOWFLAKE_COUNT = 50;
+
 	@ViewChild('userNameInput') userNameInput!: ElementRef<HTMLInputElement>;
 
-	public userInfo: UserInfo;
+	public userInfo?: UserInfo;
 	private dataService = inject(DataService);
 	private userNameService = inject(UserNameStorageService);
 	public userName = this.userNameService.getUserName();
@@ -30,18 +33,23 @@ export class HeaderComponent implements AfterViewInit {
 	ngAfterViewInit(): void {
 		this.dataService.getUserInfo()
 			.pipe(
+				catchError(() => of<UserInfo | null>(null)),
 				takeUntilDestroyed(this.destroyRef)
 			)
-			.subscribe((user: UserInfo) => {
-				this.userInfo = user
+			.subscribe((user: UserInfo | null) => {
+				if (user) {
+					this.userInfo = user
+				}
 			});
 
-		// Обработка ввода username с debouncing
+		// Handle username input with debouncing
 		const input = this.userNameInput.nativeElement;
 		fromEvent<KeyboardEvent>(input, 'keyup')
 			.pipe(
-				debounceTime(500),
-				tap(() => this.userNameService.saveUserName(input.value.trim())),
+				map(() => input.value.trim()),
+				debounceTime(this.DEBOUNCE_TIME_MS),
+				filter(username => username.length > 0), // Only proceed if username is not empty
+				tap(username => this.userNameService.saveUserName(username)),
 				takeUntilDestroyed(this.destroyRef),
 				switchMap(() => {
 					return this.dataService.getKatas()
@@ -55,12 +63,12 @@ export class HeaderComponent implements AfterViewInit {
 
 	private checkWinter(): void {
 		const currentMonth = new Date().getMonth(); // 0-11
-		// Зима: декабрь (11), январь (0), февраль (1)
+		// Winter: December (11), January (0), February (1)
 		this.isWinter = currentMonth === 11 || currentMonth === 0 || currentMonth === 1;
 
 		if (this.isWinter) {
-			// Создаем массив для 50 снежинок (больше маленьких)
-			this.snowflakes = Array.from({length: 50}, (_, i) => i);
+			// Create array for snowflakes
+			this.snowflakes = Array.from({length: this.SNOWFLAKE_COUNT}, (_, i) => i);
 		}
 	}
 }
