@@ -2,7 +2,6 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {CodewarsResponse, Kata, YearData} from "../../interfaces";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {catchError, of} from "rxjs";
 
 @Component({
     selector: 'app-calendar',
@@ -17,10 +16,9 @@ export class CalendarComponent implements OnInit {
 	private destroyRef = inject(DestroyRef);
 
 	ngOnInit(): void {
-		// Subscribe to data changes from DataService
-		this.dataService.getKatas()
+		// Subscribe to shared kata data from DataService
+		this.dataService.katas$
 			.pipe(
-				catchError(() => of<CodewarsResponse>({data: [], totalItems: 0, totalPages: 0})),
 				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe((response: CodewarsResponse) => {

@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild} from '@angular/core';
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {DataService} from "../../services/data.service";
-import {CodewarsResponse, UserInfo} from "../../interfaces";
-import {catchError, debounceTime, filter, fromEvent, map, of, switchMap, tap} from "rxjs";
+import {UserInfo} from "../../interfaces";
+import {debounceTime, filter, fromEvent, map, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
@@ -31,9 +31,9 @@ export class HeaderComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this.dataService.getUserInfo()
+		// Subscribe to shared user info
+		this.dataService.userInfo$
 			.pipe(
-				catchError(() => of<UserInfo | null>(null)),
 				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe((user: UserInfo | null) => {
@@ -41,6 +41,12 @@ export class HeaderComponent implements AfterViewInit {
 					this.userInfo = user
 				}
 			});
+
+		// Fetch initial data if username exists
+		if (this.userName) {
+			this.dataService.fetchKatas();
+			this.dataService.fetchUserInfo();
+		}
 
 		// Handle username input with debouncing
 		const input = this.userNameInput.nativeElement;
@@ -50,13 +56,12 @@ export class HeaderComponent implements AfterViewInit {
 				debounceTime(this.DEBOUNCE_TIME_MS),
 				filter(username => username.length > 0), // Only proceed if username is not empty
 				tap(username => this.userNameService.saveUserName(username)),
-				takeUntilDestroyed(this.destroyRef),
-				switchMap(() => {
-					return this.dataService.getKatas()
-						.pipe(
-							catchError(() => of<CodewarsResponse>({data: [], totalItems: 0, totalPages: 0}))
-						)
-				})
+				tap(() => {
+					// Fetch data for new username
+					this.dataService.fetchKatas();
+					this.dataService.fetchUserInfo();
+				}),
+				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe();
 	}
