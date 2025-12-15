@@ -8,6 +8,7 @@
   border-radius: 20px;
   width: 82vw;
   max-width: 1200px;
+  min-width: 1200px;
   margin-bottom: 30px;
   background-color: #fff;
   padding: 10px 6px 6px 6px;
@@ -113,6 +114,8 @@
   visibility: hidden;
   position: absolute;
   z-index: 3;
+  width: max-content;
+  max-width: 300px;
   color: white;
   font-size: 12px;
   background-color: #192733;
