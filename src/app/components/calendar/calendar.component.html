@@ -19,24 +19,28 @@
         <p>Dec</p>
       </div>
       <div class="days">
-        @for (day of year.days; track day) {
-          <div
-        [ngClass]="{
-          'day': !day.isPlaceholder,
-          'day-placeholder': day.isPlaceholder,
-          'hasKata': !day.isPlaceholder && day.completedKata.length > 0,
-          'hasKata-2': !day.isPlaceholder && day.completedKata.length > 3,
-          'hasKata-3': !day.isPlaceholder && day.completedKata.length > 4,
-          'hasKata-4': !day.isPlaceholder && day.completedKata.length > 6
-        }">
-            @if (!day.isPlaceholder) {
-              <div class="hover-text">
-                <span class="tooltip-text">
-                  <span>{{day.date | date: 'EEE dd MMM '}}</span>
-                  @for (kata of day.completedKata; track kata) {
-                    <span class="kataName">- {{kata.name}}</span>
-                  }
-                </span>
+        @for (week of year.weeks; track week; let isLast = $last) {
+          <div [ngClass]="{'week': true, 'last-week': isLast}">
+            @for (day of week; track day) {
+              <div
+            [ngClass]="{
+              'day': !day.isPlaceholder,
+              'day-placeholder': day.isPlaceholder,
+              'hasKata': !day.isPlaceholder && day.completedKata.length > 0,
+              'hasKata-2': !day.isPlaceholder && day.completedKata.length > 3,
+              'hasKata-3': !day.isPlaceholder && day.completedKata.length > 4,
+              'hasKata-4': !day.isPlaceholder && day.completedKata.length > 6
+            }">
+                @if (!day.isPlaceholder) {
+                  <div class="hover-text">
+                    <span class="tooltip-text">
+                      <span>{{day.date | date: 'EEE dd MMM '}}</span>
+                      @for (kata of day.completedKata; track kata) {
+                        <span class="kataName">- {{kata.name}}</span>
+                      }
+                    </span>
+                  </div>
+                }
               </div>
             }
           </div>

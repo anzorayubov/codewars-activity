@@ -50,5 +50,5 @@ export interface YearData {
 	year: number
 	completedKata: Kata[]
 	dayInYear: number
-	days: CalendarDay[]
+	weeks: CalendarDay[][]
 }

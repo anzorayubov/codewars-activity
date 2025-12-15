@@ -54,20 +54,25 @@ export class CalendarComponent implements OnInit {
 
 		// Build year data structures
 		for (const [year, completedKata] of completedKataByYear) {
-			const daysInYear = this.getDaysInYear(year);
+			const weeks = this.getDaysInYear(year);
 
 			// Assign kata to days using O(1) Map lookup instead of O(n) filter
-			for (const day of daysInYear) {
-				if (day.date) {
-					day.completedKata = completedKataByDate.get(day.date) || [];
+			for (const week of weeks) {
+				for (const day of week) {
+					if (day.date) {
+						day.completedKata = completedKataByDate.get(day.date) || [];
+					}
 				}
 			}
+
+			// Flatten weeks back to days for dayInYear count
+			const allDays = weeks.flat();
 
 			this.years.push({
 				year: year,
 				completedKata: completedKata,
-				dayInYear: daysInYear.length,
-				days: daysInYear,
+				dayInYear: allDays.length,
+				weeks: weeks,
 			});
 		}
 	}
@@ -99,7 +104,13 @@ export class CalendarComponent implements OnInit {
 			});
 		}
 
-		return days;
+		// Group days into weeks
+		const weeks = [];
+		for (let i = 0; i < days.length; i += 7) {
+			weeks.push(days.slice(i, i + 7));
+		}
+
+		return weeks;
 	}
 
 	private formattingArray(array: Kata[]): Kata[] {
