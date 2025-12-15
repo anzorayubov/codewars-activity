@@ -6,10 +6,11 @@
   height: 60px;
   display: flex;
   align-items: center;
-  background-color: #24292f;
-  color: white;
+  background-color: var(--header-bg);
+  color: var(--header-text);
   font-weight: 600;
   overflow: hidden;
+  gap: 16px;
 }
 
 .toolbar img {
@@ -32,17 +33,20 @@
 }
 
 .userName {
-  margin-left: 14px;
   border-radius: 6px;
-  background-color: lightgray;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
   font-size: 18px;
   text-align: center;
+  padding: 4px 8px;
 }
 
 .userInfo {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
+  margin-left: auto;
+  margin-right: 12px;
 }
 
 .snow-container {
@@ -58,7 +62,7 @@
 .snowflake {
   position: absolute;
   top: -20px;
-  color: white;
+  color: var(--header-text);
   font-size: 12px;
   opacity: 0.8;
   animation: fall ease-in infinite, swayAndRotate ease-in-out infinite;
@@ -142,4 +146,39 @@
   animation-duration: 4.8s, 8.2s;
   font-size: 12px;
   opacity: 0.85;
+}
+
+// Theme toggle button
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-muted);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  transition: all 0.2s ease;
+  color: var(--header-text);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-default);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--activity-level-3);
+    outline-offset: 2px;
+  }
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  color: inherit;
 }

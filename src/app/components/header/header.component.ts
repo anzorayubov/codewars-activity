@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild} from '@angular/core';
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {DataService} from "../../services/data.service";
+import {ThemeService} from "../../services/theme.service";
 import {UserInfo} from "../../interfaces";
 import {debounceTime, filter, fromEvent, map, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -21,10 +22,12 @@ export class HeaderComponent implements AfterViewInit {
 	public userInfo?: UserInfo;
 	private dataService = inject(DataService);
 	private userNameService = inject(UserNameStorageService);
+	private themeService = inject(ThemeService);
 	public userName = this.userNameService.getUserName();
 	private destroyRef = inject(DestroyRef);
 	public isWinter: boolean = false;
 	public snowflakes: number[] = [];
+	public currentTheme$ = this.themeService.theme$;
 
 	constructor() {
 		this.checkWinter();
@@ -75,5 +78,9 @@ export class HeaderComponent implements AfterViewInit {
 			// Create array for snowflakes
 			this.snowflakes = Array.from({length: this.SNOWFLAKE_COUNT}, (_, i) => i);
 		}
+	}
+
+	public toggleTheme(): void {
+		this.themeService.toggleTheme();
 	}
 }

@@ -4,13 +4,13 @@
 }
 
 .year {
-  border: 1px solid gray;
+  border: 1px solid var(--border-default);
   border-radius: 20px;
   width: 82vw;
   max-width: 1200px;
   min-width: 1200px;
   margin-bottom: 30px;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   padding: 10px 6px 6px 6px;
   position: relative;
 }
@@ -20,7 +20,7 @@
   justify-content: space-between;
   right: 50%;
   top: 0;
-  color: gray;
+  color: var(--text-secondary);
   margin: -6px 8px 0 8px;
 }
 
@@ -43,19 +43,19 @@
 }
 
 .day {
-  background-color: #eeeeee;
+  background-color: var(--activity-level-0);
   border-radius: 4px;
   overflow: hidden;
   width: 16px;
   height: 16px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--border-muted);
   margin: 2px;
   text-align: center;
   font-size: 8px;
 }
 
 .day:hover {
-  box-shadow: 0 0 4px #1976d2;
+  box-shadow: 0 0 4px var(--activity-level-3);
 }
 
 .day-placeholder {
@@ -68,25 +68,26 @@
 }
 
 .month {
-  background-color: #ffffff;
+  background-color: var(--bg-primary);
   display: flex;
   justify-content: space-around;
+  color: var(--text-secondary);
 }
 
 .hasKata {
-  background-color: #b6e3ff;
+  background-color: var(--activity-level-1);
 }
 
 .hasKata-2 {
-  background-color: #54aeff;
+  background-color: var(--activity-level-2);
 }
 
 .hasKata-3 {
-  background-color: #0969da;
+  background-color: var(--activity-level-3);
 }
 
 .hasKata-4 {
-  background-color: #034594;
+  background-color: var(--activity-level-4);
 }
 
 .kata-description {
@@ -116,9 +117,9 @@
   z-index: 3;
   width: max-content;
   max-width: 300px;
-  color: white;
+  color: var(--header-text);
   font-size: 12px;
-  background-color: #192733;
+  background-color: var(--tooltip-bg);
   border-radius: 10px;
   padding: 10px 15px 10px 15px;
   display: flex;
@@ -126,11 +127,12 @@
   text-align: left;
   margin-top: -50px;
   margin-left: 14px;
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .tooltip-text span:first-child {
   margin-bottom: 6px;
-  border-bottom: 1px dashed gray;
+  border-bottom: 1px dashed var(--border-muted);
   text-align: center;
   padding-bottom: 4px;
 }

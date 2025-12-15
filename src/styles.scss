@@ -1,1 +1,110 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* ===== CSS Custom Properties for Theming ===== */
+
+:root {
+  /* Light theme colors (default) */
+
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eeeeee;
+
+  /* Text */
+  --text-primary: #333333;
+  --text-secondary: #57606a;
+  --text-inverse: #ffffff;
+
+  /* Header */
+  --header-bg: #24292f;
+  --header-text: #ffffff;
+
+  /* Borders */
+  --border-default: #d0d7de;
+  --border-muted: lightgray;
+
+  /* Inputs */
+  --input-bg: #f6f8fa;
+  --input-border: #d0d7de;
+
+  /* Activity levels (blue gradient - GitHub style) */
+  --activity-level-0: #eeeeee;
+  --activity-level-1: #b6e3ff;
+  --activity-level-2: #54aeff;
+  --activity-level-3: #0969da;
+  --activity-level-4: #034594;
+
+  /* Tooltips */
+  --tooltip-bg: #192733;
+
+  /* Shadows */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme colors */
+body[data-theme='dark'] {
+  /* Backgrounds */
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+
+  /* Text */
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-inverse: #0d1117;
+
+  /* Header */
+  --header-bg: #161b22;
+  --header-text: #e6edf3;
+
+  /* Borders */
+  --border-default: #30363d;
+  --border-muted: #21262d;
+
+  /* Inputs */
+  --input-bg: #0d1117;
+  --input-border: #30363d;
+
+  /* Activity levels (brighter blue for dark mode visibility) */
+  --activity-level-0: #161b22;
+  --activity-level-1: #0c2d6b;
+  --activity-level-2: #1158c7;
+  --activity-level-3: #2f81f7;
+  --activity-level-4: #58a6ff;
+
+  /* Tooltips */
+  --tooltip-bg: #1c2128;
+
+  /* Shadows */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Global Styles ===== */
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth theme transitions only for main containers */
+body,
+.toolbar,
+.year,
+.content {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Interactive elements with transform */
+input,
+button,
+.theme-toggle {
+  transition: background-color 0.2s ease,
+              color 0.2s ease,
+              border-color 0.2s ease,
+              transform 0.2s ease;
+}
