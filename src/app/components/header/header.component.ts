@@ -20,6 +20,8 @@ export class HeaderComponent implements AfterViewInit {
 	@ViewChild('userNameInput') userNameInput!: ElementRef<HTMLInputElement>;
 
 	public userInfo?: UserInfo;
+	public isLoadingUserInfo = false;
+	public userInfoError: string | null = null;
 	private dataService = inject(DataService);
 	private userNameService = inject(UserNameStorageService);
 	private themeService = inject(ThemeService);
@@ -40,6 +42,24 @@ export class HeaderComponent implements AfterViewInit {
 				if (user) {
 					this.userInfo = user
 				}
+			});
+
+		// Subscribe to user info loading state
+		this.dataService.userInfoLoading$
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((loading: boolean) => {
+				this.isLoadingUserInfo = loading;
+			});
+
+		// Subscribe to user info error state
+		this.dataService.userInfoError$
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((error: string | null) => {
+				this.userInfoError = error;
 			});
 
 		// Fetch initial data if username exists

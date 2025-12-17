@@ -12,6 +12,8 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 export class CalendarComponent implements OnInit {
 
 	public years: YearData[] = [];
+	public isLoading = false;
+	public errorMessage: string | null = null;
 	private dataService = inject(DataService);
 	private destroyRef = inject(DestroyRef);
 
@@ -23,6 +25,24 @@ export class CalendarComponent implements OnInit {
 			)
 			.subscribe((response: CodewarsResponse) => {
 				this.setData(response.data);
+			});
+
+		// Subscribe to loading state
+		this.dataService.katasLoading$
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((loading: boolean) => {
+				this.isLoading = loading;
+			});
+
+		// Subscribe to error state
+		this.dataService.katasError$
+			.pipe(
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe((error: string | null) => {
+				this.errorMessage = error;
 			});
 	}
 

@@ -47,6 +47,18 @@
   flex-direction: column;
   margin-left: auto;
   margin-right: 12px;
+  min-width: 150px;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.error-text {
+  color: #d73a49;
+  font-size: 13px;
 }
 
 .snow-container {

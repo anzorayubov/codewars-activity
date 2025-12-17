@@ -21,6 +21,20 @@ export class DataService {
 	private userInfoSubject = new BehaviorSubject<UserInfo | null>(null);
 	public userInfo$ = this.userInfoSubject.asObservable();
 
+	// Loading states
+	private katasLoadingSubject = new BehaviorSubject<boolean>(false);
+	public katasLoading$ = this.katasLoadingSubject.asObservable();
+
+	private userInfoLoadingSubject = new BehaviorSubject<boolean>(false);
+	public userInfoLoading$ = this.userInfoLoadingSubject.asObservable();
+
+	// Error states
+	private katasErrorSubject = new BehaviorSubject<string | null>(null);
+	public katasError$ = this.katasErrorSubject.asObservable();
+
+	private userInfoErrorSubject = new BehaviorSubject<string | null>(null);
+	public userInfoError$ = this.userInfoErrorSubject.asObservable();
+
 	private get userName(): string {
 		return this.userNameService.getUserName()
 	}
@@ -31,13 +45,26 @@ export class DataService {
 	fetchKatas(): void {
 		if (!this.userName) {
 			this.katasSubject.next({data: [], totalItems: 0, totalPages: 0});
+			this.katasErrorSubject.next(null);
 			return;
 		}
 
+		this.katasLoadingSubject.next(true);
+		this.katasErrorSubject.next(null);
+
 		this.http.get<CodewarsResponse>(`${this.baseUrl}${this.userName}/code-challenges/completed`)
 			.subscribe({
-				next: (response) => this.katasSubject.next(response),
-				error: () => this.katasSubject.next({data: [], totalItems: 0, totalPages: 0})
+				next: (response) => {
+					this.katasSubject.next(response);
+					this.katasLoadingSubject.next(false);
+					this.katasErrorSubject.next(null);
+				},
+				error: (error) => {
+					console.error('Failed to fetch katas:', error);
+					this.katasSubject.next({data: [], totalItems: 0, totalPages: 0});
+					this.katasLoadingSubject.next(false);
+					this.katasErrorSubject.next('Failed to load activity data. Please check the username and try again.');
+				}
 			});
 	}
 
@@ -47,13 +74,26 @@ export class DataService {
 	fetchUserInfo(): void {
 		if (!this.userName) {
 			this.userInfoSubject.next(null);
+			this.userInfoErrorSubject.next(null);
 			return;
 		}
 
+		this.userInfoLoadingSubject.next(true);
+		this.userInfoErrorSubject.next(null);
+
 		this.http.get<UserInfo>(`${this.baseUrl}${this.userName}`)
 			.subscribe({
-				next: (response) => this.userInfoSubject.next(response),
-				error: () => this.userInfoSubject.next(null)
+				next: (response) => {
+					this.userInfoSubject.next(response);
+					this.userInfoLoadingSubject.next(false);
+					this.userInfoErrorSubject.next(null);
+				},
+				error: (error) => {
+					console.error('Failed to fetch user info:', error);
+					this.userInfoSubject.next(null);
+					this.userInfoLoadingSubject.next(false);
+					this.userInfoErrorSubject.next('Failed to load user info.');
+				}
 			});
 	}
 
