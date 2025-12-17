@@ -2,6 +2,7 @@ import {AfterViewInit, Component, DestroyRef, ElementRef, inject, ViewChild} fro
 import {UserNameStorageService} from "../../services/user-name-storage.service";
 import {DataService} from "../../services/data.service";
 import {ThemeService} from "../../services/theme.service";
+import {SnowEffectService} from "../../services/snow-effect.service";
 import {UserInfo} from "../../interfaces";
 import {debounceTime, filter, fromEvent, map, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -15,7 +16,6 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 export class HeaderComponent implements AfterViewInit {
 
 	private readonly DEBOUNCE_TIME_MS = 500;
-	private readonly SNOWFLAKE_COUNT = 50;
 
 	@ViewChild('userNameInput') userNameInput!: ElementRef<HTMLInputElement>;
 
@@ -23,15 +23,12 @@ export class HeaderComponent implements AfterViewInit {
 	private dataService = inject(DataService);
 	private userNameService = inject(UserNameStorageService);
 	private themeService = inject(ThemeService);
+	private snowEffectService = inject(SnowEffectService);
 	public userName = this.userNameService.getUserName();
 	private destroyRef = inject(DestroyRef);
-	public isWinter: boolean = false;
-	public snowflakes: number[] = [];
+	public isWinter = this.snowEffectService.isWinter();
+	public snowflakes = this.snowEffectService.getSnowflakes();
 	public currentTheme$ = this.themeService.theme$;
-
-	constructor() {
-		this.checkWinter();
-	}
 
 	ngAfterViewInit(): void {
 		// Subscribe to shared user info
@@ -67,17 +64,6 @@ export class HeaderComponent implements AfterViewInit {
 				takeUntilDestroyed(this.destroyRef)
 			)
 			.subscribe();
-	}
-
-	private checkWinter(): void {
-		const currentMonth = new Date().getMonth(); // 0-11
-		// Winter: December (11), January (0), February (1)
-		this.isWinter = currentMonth === 11 || currentMonth === 0 || currentMonth === 1;
-
-		if (this.isWinter) {
-			// Create array for snowflakes
-			this.snowflakes = Array.from({length: this.SNOWFLAKE_COUNT}, (_, i) => i);
-		}
 	}
 
 	public toggleTheme(): void {
