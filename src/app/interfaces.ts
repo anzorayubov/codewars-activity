@@ -5,12 +5,10 @@ export interface CodewarsResponse {
 }
 
 export interface Kata {
-	completedAt: Date | string  // Date от API, string после форматирования
+	completedAt: Date | string  // API returns Date, normalized to YYYY-MM-DD string format
 	name: string
-	completedLanguages?: []
-	id?: number
+	id?: string
 	slug?: string
-	days?: []
 }
 
 export interface UserInfo {

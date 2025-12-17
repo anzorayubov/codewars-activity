@@ -30,7 +30,7 @@ export class CalendarComponent implements OnInit {
 		// Clear array to avoid duplication
 		this.years = [];
 
-		const katas = this.formattingArray(response);
+		const katas = this.normalizeKatas(response);
 		const completedKataByYear = new Map<number, Kata[]>();
 		const completedKataByDate = new Map<string, Kata[]>();
 
@@ -113,7 +113,7 @@ export class CalendarComponent implements OnInit {
 		return weeks;
 	}
 
-	private formattingArray(array: Kata[]): Kata[] {
+	private normalizeKatas(array: Kata[]): Kata[] {
 		return array.map((item: Kata) => {
 			return {
 				name: item.name,

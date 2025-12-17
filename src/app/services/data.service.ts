@@ -57,13 +57,5 @@ export class DataService {
 			});
 	}
 
-	// Legacy methods - kept for backward compatibility but deprecated
-	getKatas(): Observable<CodewarsResponse> {
-		return this.http.get<CodewarsResponse>(`${this.baseUrl}${this.userName}/code-challenges/completed`)
-	}
-
-	getUserInfo(): Observable<UserInfo> {
-		return this.http.get<UserInfo>(`${this.baseUrl}${this.userName}`)
-	}
 
 }
